@@ -1,34 +1,31 @@
 package com.dxc.cbs.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "User")
-public class User {
-	@Transient
-	public static final String SEQUENCE_NAME = "user_sequence";
-	
+@Document(collection = "Admin")
+public class Admin {
 	@Id
-	private int userId;
+	private int adminId;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
-	public User() {
+	public Admin() {
 	
 	}
-	public User(String firstName, String lastName, String email, String password) {
+	public Admin(int adminId, String firstName, String lastName, String email, String password) {
+		this.adminId = adminId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 	}
-	public int getUserId() {
-		return userId;
+	public int getAdminId() {
+		return adminId;
 	}
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setAdminId(int adminId) {
+		this.adminId = adminId;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -56,8 +53,9 @@ public class User {
 	}
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+		return "Admin [adminId=" + adminId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
 				+ ", password=" + password + "]";
 	}
+	
 	
 }
