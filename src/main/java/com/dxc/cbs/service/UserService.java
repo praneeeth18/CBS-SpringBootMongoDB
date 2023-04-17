@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dxc.cbs.dao.UserDao;
+import com.dxc.cbs.dao.UserLoginDao;
+import com.dxc.cbs.model.Booking;
 import com.dxc.cbs.model.User;
+import com.dxc.cbs.model.UserLogin;
 
 @Service
 public class UserService {
@@ -52,7 +55,27 @@ public class UserService {
         return false;
     }
 	
+	
 	public Optional<User> getUserById(int id) {
 	    return dao.findById(id);
 	}
+	
+	public Optional<User> getUserByEmail(String email) {
+		return dao.findByEmail(email);
+	}
+	
+	public boolean createBooking(int id, Booking booking) {
+	    Optional<User> optionalUser = dao.findById(id);
+	    if (optionalUser.isPresent()) {
+	        User user = optionalUser.get();
+	        List<Booking> bookings = user.getBookings();
+	        bookings.add(booking);
+	        user.setBookings(bookings);
+	        dao.save(user);
+	        return true;
+	    }
+	    return false;
+	}
+	
+	
 }

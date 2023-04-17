@@ -1,5 +1,6 @@
 package com.dxc.cbs.controller;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +16,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dxc.cbs.dao.UserDao;
+import com.dxc.cbs.dao.UserLoginDao;
+import com.dxc.cbs.model.Booking;
 import com.dxc.cbs.model.User;
+import com.dxc.cbs.model.UserLogin;
 import com.dxc.cbs.service.SequenceGeneratorService;
+import com.dxc.cbs.service.UserLoginService;
 import com.dxc.cbs.service.UserService;
+
+
 
 import static com.dxc.cbs.model.User.*;
 
@@ -25,9 +33,18 @@ import static com.dxc.cbs.model.User.*;
 @CrossOrigin(origins="http://localhost:4200/")
 public class UserController {
 	@Autowired
+	private UserDao dao;
+	
+	@Autowired
+	private UserLoginDao loginDao;
+	
+	@Autowired
 	UserService service;
+	@Autowired
+	UserLoginService loginService;
 	ResponseEntity response;
 	boolean flag;
+	
 	
 	@Autowired
 	private SequenceGeneratorService sequenceService;
@@ -51,11 +68,17 @@ public class UserController {
 		flag = service.addUser(user);
 		if (flag) {
 	        user.setUserId(sequenceService.getSequenceNumber(SEQUENCE_NAME));
+	        UserLogin userLogin = new UserLogin();
+	        userLogin.setEmail(user.getEmail());
+	        userLogin.setPassword(user.getPassword());
+	        loginService.addUser(userLogin);
 	        return new ResponseEntity<>(user, HttpStatus.CREATED);
 	    } else {
 	        return new ResponseEntity<>("User object creation failed", HttpStatus.BAD_REQUEST);
 	    }
 	}
+	
+	
 	
 //	@PostMapping("/addUser")
 //	public User addUser(@RequestBody User user) {
@@ -117,5 +140,37 @@ public class UserController {
         } else {
             return new ResponseEntity<>("User object with ID " + id + " does not exist", HttpStatus.NOT_FOUND);
         }
+    }
+    
+    @GetMapping("/users/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+    	Optional<User> optionalUser = service.getUserByEmail(email);
+    	if(optionalUser.isPresent()) {
+    		return new ResponseEntity<>(optionalUser.get(), HttpStatus.OK);
+    	}
+    	else {
+    		return new ResponseEntity<>("User object with email" + email + "does not exit", HttpStatus.NOT_FOUND);
+    	}
+    }
+    
+    @PostMapping("/users/{id}/bookings")
+    public ResponseEntity<?> createBooking(@PathVariable int id, @RequestBody Booking booking) {
+    	boolean success = service.createBooking(id, booking);
+        if (success) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/users/{id}/bookings")
+    public ResponseEntity<List<Booking>> getBookingsByUserId(@PathVariable int id) {
+    	Optional<User> optionalUser = service.getUserById(id);
+        if (!optionalUser.isPresent()) {
+            return ResponseEntity.notFound().build();
+        }
+        User user = optionalUser.get();
+        List<Booking> bookings = user.getBookings();
+        return ResponseEntity.ok(bookings);
     }
 }
