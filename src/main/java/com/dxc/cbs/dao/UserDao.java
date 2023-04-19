@@ -8,4 +8,6 @@ import com.dxc.cbs.model.User;
 
 public interface UserDao extends MongoRepository<User, Integer> {
 	Optional<User> findByEmail(String email);
+	Optional<User> findByPassword(String password);
+	Optional<User> findByEmailAndPassword(String email, String password);
 }

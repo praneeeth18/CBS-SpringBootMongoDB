@@ -64,6 +64,15 @@ public class UserService {
 		return dao.findByEmail(email);
 	}
 	
+	public Optional<User> getUserByPassword(String password) {
+		return dao.findByPassword(password);
+	}
+	
+	public boolean getUserByEp(String email, String password) {
+		Optional<User> optionalUser = dao.findByEmailAndPassword(email, password);
+	    return optionalUser.isPresent();
+    }
+	
 	public boolean createBooking(int id, Booking booking) {
 	    Optional<User> optionalUser = dao.findById(id);
 	    if (optionalUser.isPresent()) {
@@ -75,6 +84,15 @@ public class UserService {
 	        return true;
 	    }
 	    return false;
+	}
+	
+	public boolean validate(User user) {
+		Optional<User> optUser = dao.findByEmail(user.getEmail());
+		Optional<User> optPassword = dao.findByPassword(user.getPassword());
+		if(optUser.isPresent() && optPassword.isPresent()) {
+			return true;
+		}
+		return false;
 	}
 	
 	

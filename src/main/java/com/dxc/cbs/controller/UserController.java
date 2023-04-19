@@ -153,6 +153,25 @@ public class UserController {
     	}
     }
     
+//    @GetMapping("/users/{email}/{password}")
+//    public ResponseEntity<?> getUserByEP(@PathVariable String email, @PathVariable String password) {
+//    	boolean userExists = service.getUserByEp(email, password);
+//        if (userExists) {
+//            return new ResponseEntity<>("User found!", HttpStatus.OK);
+//        } else {
+//            return new ResponseEntity<>("User not found!", HttpStatus.NOT_FOUND);
+//        }
+//    }
+    @GetMapping("/users/{email}/{password}")
+    public ResponseEntity<?> getUserByEP(@PathVariable String email, @PathVariable String password) {
+        boolean userExists = service.getUserByEp(email, password);
+        if (userExists) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
     @PostMapping("/users/{id}/bookings")
     public ResponseEntity<?> createBooking(@PathVariable int id, @RequestBody Booking booking) {
     	boolean success = service.createBooking(id, booking);
@@ -173,4 +192,7 @@ public class UserController {
         List<Booking> bookings = user.getBookings();
         return ResponseEntity.ok(bookings);
     }
+    
+    
+    
 }

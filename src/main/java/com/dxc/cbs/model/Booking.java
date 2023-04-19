@@ -12,16 +12,18 @@ public class Booking {
 	private String destination;
 	private String cabModel;
 	private double price;
+	private String status;
 	public Booking() {
 		
 	}
-	public Booking(int bookingId,String email, String source, String destination, double price, String cabModel) {
+	public Booking(int bookingId,String email, String source, String destination, double price, String cabModel, String status) {
 		this.bookingId = bookingId;
 		this.email = email;
 		this.source = source;
 		this.destination = destination;
 		this.cabModel = cabModel;
 		this.price = price;
+		this.status = status;
 	}
 	public int getBookingId() {
 		return bookingId;
@@ -59,6 +61,12 @@ public class Booking {
 	}
 	public void setCabModel(String cabModel) {
 		this.cabModel = cabModel;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	@Override
 	public String toString() {

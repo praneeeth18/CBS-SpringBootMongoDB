@@ -35,7 +35,23 @@ public class BookingService {
 		return false;
 	}
 	
+	public boolean updateBooking(int id, Booking newBooking) {
+		Optional<Booking> optionalBooking = dao.findById(id);
+		if(optionalBooking.isPresent()) {
+			Booking booking = optionalBooking.get();
+			booking.setStatus(newBooking.getStatus());
+			dao.save(booking);
+			return true;
+		}
+		return false;
+	}
+	
+	
 	public Optional<Booking> getBookingById(int id) {
 		return dao.findById(id);
+	}
+	
+	public List<Booking> getBookingByEmail(String email) {
+		return dao.findByEmail(email);
 	}
 }

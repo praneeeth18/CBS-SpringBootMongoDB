@@ -26,6 +26,11 @@ public class AdminService {
 		return dao.findAll();
 	}
 	
+	public boolean getUserByEp(String email, String password) {
+		Optional<Admin> optionalUser = dao.findByEmailAndPassword(email, password);
+	    return optionalUser.isPresent();
+    }
+	
 	public boolean deleteAdmin(int id) {
         Optional<Admin> optionalAdmin = dao.findById(id);
         if (optionalAdmin.isPresent()) {

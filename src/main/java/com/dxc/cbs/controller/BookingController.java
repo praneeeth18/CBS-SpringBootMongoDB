@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,13 +55,13 @@ public class BookingController {
 		return response;
 	}
 	
-	@GetMapping("/bookings/{id}")
-	public ResponseEntity<?> getBookingById(@PathVariable int id) {
-		Optional<Booking> optionalBooking = service.getBookingById(id);
-		if(optionalBooking.isPresent()) {
-			return new ResponseEntity<>(optionalBooking.get(), HttpStatus.OK);
+	@GetMapping("/bookings/{email}")
+	public ResponseEntity<?> getBookingById(@PathVariable String email) {
+		List<Booking> bookingList = service.getBookingByEmail(email);
+		if(bookingList!= null) {
+			return new ResponseEntity<List<Booking>>(bookingList, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("Booking object with ID " + id + " does not exist", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("Booking object with ID " + email + " does not exist", HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -72,6 +73,16 @@ public class BookingController {
 		} else {
 			return new ResponseEntity<>("Booking object with ID " + id + " does not exist", HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@PutMapping("/bookings/{id}")
+	public ResponseEntity<?> updateBooking(@PathVariable int id, @RequestBody Booking updatedBooking) {
+		boolean isUpdated = service.updateBooking(id, updatedBooking);
+		if(isUpdated) {
+			return new ResponseEntity<>("Booking object with ID " + id + " has been updated", HttpStatus.OK);
+		} else {
+            return new ResponseEntity<>("Booking object with ID " + id + " does not exist", HttpStatus.NOT_FOUND);
+        }
 	}
 	
 }
