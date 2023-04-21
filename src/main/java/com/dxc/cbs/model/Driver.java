@@ -13,6 +13,7 @@ public class Driver {
 	public String email;
 	public String password;
 	public String vehicleno;
+//	public String phone;
 	public Driver() {
 		
 	}

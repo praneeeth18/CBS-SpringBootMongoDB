@@ -13,6 +13,9 @@ public class Booking {
 	private String cabModel;
 	private double price;
 	private String status;
+//	private String driverName;
+//	private String vehicleno;
+//	private String phone;
 	public Booking() {
 		
 	}
